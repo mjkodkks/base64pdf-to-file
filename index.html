@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 - SAVE to PDF</title>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <textarea name="textarea" id="textarea" cols="30" rows="10" placeholder="base64 text..."
+          style="max-width: 1440px; min-width: 800px; height: 400px; background: gainsboro; border-radius: 1rem;"></textarea>
+        <button id="btn-save" 
+        style="width: 40%; height: 40px; margin: 1rem; border-radius: 0.75rem; cursor: pointer;">SAVE to PDF</button>
+    </div>
+    <script>
+        let textarea = document.getElementById('textarea');
+        let btnSave = document.getElementById('btn-save');
+        
+        btnSave.addEventListener("click", ()=> {
+            const b64 = textarea.value; 
+            if (!b64) return 
+            const name = "filled_pdf_" + formatDate(); 
+            savePdfFileBase64(b64, name)
+        })
+
+        function formatDate(date = new Date()) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}${month}${day}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
+        }
+
+        function savePdfFileBase64(b64, name) {
+            const linkSource = `data:application/pdf;base64,${b64}`;
+            const downloadLink = document.createElement("a");
+            const fileName = `${name}.pdf`;
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+        } 
+    </script>
+</body>
+</html>
